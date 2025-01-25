@@ -11,6 +11,8 @@
       rel="stylesheet"
     />
 
+    <!-- You can find other web fonts at https://fonts.google.com/ ! -->
+
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <style>
@@ -18,35 +20,21 @@
         font-family: "Lato", sans-serif;
         margin: 0;
         padding: 0;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
 
       header {
         padding: 10px;
-        text-align: center;
       }
 
       main {
         width: 960px;
-        margin: 0 auto;
       }
 
-      a:link {
-        color: #007bff;
-        text-decoration: none;
-      }
-
-      a:visited {
-        color: #007bff;
-      }
-
-      a:hover {
-        text-decoration: underline;
-      }
-
-      li {
-        font-size: 1.2em;
-        list-style-type: none;
-      }
+      /* Add plenty of styles below. You can change any of the above, as well! */
     </style>
   </head>
   <body>
@@ -70,6 +58,9 @@
         This is how the browser is able to ensure that only one radio button from this
         group is selected at a time.
         <input> is a "void" element, so there's no need to close it with </input>.
+
+        Avoid dropdowns (<select>) for this assignment, because the autograder won't be
+        able to find the options to click on.
       -->
 
       <!--
