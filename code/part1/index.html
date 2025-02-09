@@ -33,7 +33,20 @@
 
       main {
         width: 960px;
+        padding: 80px;
       }
+
+      td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 12px 24px 12px 24px;
+      }
+      
+      form, table {
+        padding: 16px;
+      }
+
+  
 
       /* Add plenty of styles below. You can change any of the above, as well! */
     </style>
@@ -43,6 +56,46 @@
       <h1>Currency Converter</h1>
     </header>
     <main>
+      
+      <p>
+        Please select the target currency to convert from:
+      </p>
+      <form>
+        <input type="radio" id="usd-clickable" name="currency" value="USD">
+        <label for="USD">USD</label><br>
+        <input type="radio" id="eur-clickable" name="currency" value="EUR">
+        <label for="EUR">EUR</label><br>
+        <input type="radio" id="cny-clickable" name="currency" value="CNY">
+        <label for="CNY">CNY</label><br>
+        <input type="radio" id="JPY-clickable" name="currency" value="JPY">
+        <label for="JPY">JPY</label>
+      </form>
+
+      <form>
+        <label for="quantity">Convert (above 0):</label>
+        <input type="number" id="quantity" name="quantity" min="0">
+        <button id="calculate-clickable">Convert</button>
+      </form>
+
+      <table>
+        <thead>
+          <tr>
+            <th>USD</th>
+            <th>EUR</th>
+            <th>CNY</th>
+            <th>JPY</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="usd-calculated"></td>
+            <td id="eur-calculated"></td>
+            <td id="cny-calculated"></td>
+            <td id="jpy-calculated"></td>
+          </tr>
+        </tbody>
+      </table>
+    
       <!-- Add your HTML code here! -->
 
       <!--
