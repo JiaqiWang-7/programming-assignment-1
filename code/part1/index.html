@@ -18,13 +18,18 @@
 
     <style>
       body {
-        font-family: "Lato", sans-serif;
+        font-family: Inter,-apple-system,system-ui,Roboto,"Helvetica Neue",Arial,sans-serif;
         margin: 0;
         padding: 0;
-
+        font-size: large;
+        margin: 20%;
+        border: 20%;
         display: flex;
         flex-direction: column;
         align-items: center;
+        color:azure;
+        background-color: #181B23;
+
       }
 
       header {
@@ -37,13 +42,48 @@
       }
 
       td, th {
-        border: 1px solid #dddddd;
+        //border: 1px solid #dddddd;
+        border-radius: 2px;
         text-align: left;
+        height: 44px;
+        width: 66px;
+        padding: 12px 24px 12px 24px;
+        background-color: #27282F;
+        box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
+
+      }
+
+      radio{
         padding: 12px 24px 12px 24px;
       }
       
-      form, table {
+      form {
         padding: 16px;
+        color:azure;
+        
+      }
+
+      button {
+        background-color: initial;
+        background-image: linear-gradient(-180deg, #00D775, #00BD68);
+        border-radius: 5px;
+        box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
+        color: #FFFFFF;
+        cursor: pointer;
+        display: inline-block;
+        font-family: Inter,-apple-system,system-ui,Roboto,"Helvetica Neue",Arial,sans-serif;
+        height: 44px;
+        line-height: 44px;
+        outline: 0;
+        overflow: hidden;
+        padding: 0 20px;
+        white-space: nowrap;
+        z-index: 9;
+        border: 0;
+      }
+
+      button:hover {
+        background: #069655;
       }
 
   
@@ -62,19 +102,20 @@
       </p>
       <form>
         <input type="radio" id="usd-clickable" name="currency" value="USD">
-        <label for="USD">USD</label><br>
+        <label for="usd-clickable">USD</label><br>
         <input type="radio" id="eur-clickable" name="currency" value="EUR">
-        <label for="EUR">EUR</label><br>
-        <input type="radio" id="cny-clickable" name="currency" value="CNY">
-        <label for="CNY">CNY</label><br>
-        <input type="radio" id="JPY-clickable" name="currency" value="JPY">
-        <label for="JPY">JPY</label>
+        <label for="eur-clickable">EUR</label><br>
+        <input type="radio" id="custom-currency-1-clickable" name="currency" value="CNY">
+        <label for="custom-currency-1-clickable">CNY</label><br>
+        <input type="radio" id="custom-currency-2-clickable" name="currency" value="JPY">
+        <label for="custom-currency-2-clickable">JPY</label>
       </form>
-
+      <span id="error-message" style="color:red; display:none"></span>
       <form>
-        <label for="quantity">Convert (above 0):</label>
-        <input type="number" id="quantity" name="quantity" min="0">
-        <button id="calculate-clickable">Convert</button>
+        <p>Input the amount here</p>
+        <label for="amount-textbox">Convert:</label>
+        <input type="number" id="amount-textbox" name="quantity" min="0">
+        <button id="calculate-clickable">Convert   </button>
       </form>
 
       <table>
@@ -90,8 +131,8 @@
           <tr>
             <td id="usd-calculated"></td>
             <td id="eur-calculated"></td>
-            <td id="cny-calculated"></td>
-            <td id="jpy-calculated"></td>
+            <td id="custom-currency-1-calculated"></td>
+            <td id="custom-currency-2-calculated"></td>
           </tr>
         </tbody>
       </table>
@@ -168,6 +209,10 @@
 
     <script>
       const EUR_PER_USD = 0.93;
+      const CNY_PER_USD = 7.31;
+      const JPY_PER_USD = 152.58;
+
+
 
       // This code grabs the element above with the id "calculate-clickable". This could
       // be a button or any other kind of element.
@@ -175,20 +220,58 @@
 
       calculateClickable.addEventListener("click", () => {
         // The code in this block runs when the element above is clicked.
-
+        //retrieve which currency was selected
+        event.preventDefault();
+        const selectedCurrency = document.querySelector('input[name="currency"]:checked')?.value;
+        //console.log(selectedCurrency || "No currency selected");
         // Now, let's grab the textbox using the required ID:
         const amountTextbox = document.getElementById("amount-textbox");
 
         // We can get the '.value' attribute of an <input> element; in this case, since it's
         // a textbox, it'll just return the text that the user typed in.
         const amount = amountTextbox.value;
+        //console.log(amount.type=== undefined);
 
         // To convert to a number, we can use the 'parseFloat' function.
         const amountAsNumber = parseFloat(amount);
 
+        // Step 1: Convert to USD first
+        const toUSD = {
+            "USD": 1,
+            "EUR": 1 / EUR_PER_USD,  // Convert EUR to USD
+            "JPY": 1 / JPY_PER_USD,  // Convert JPY to USD
+            "CNY": 1 / CNY_PER_USD   // Convert CNY to USD
+        };
+
+        const amountInUSD= amountAsNumber * toUSD[selectedCurrency];
+        //console.log(amountInUSD);
+
+        // Step 2: Convert from USD to other currencies and update table
+        document.getElementById("usd-calculated").innerText = (amountInUSD * 1).toFixed(2);
+        document.getElementById("eur-calculated").innerText = (amountInUSD * EUR_PER_USD).toFixed(2);
+        document.getElementById("custom-currency-1-calculated").innerText = (amountInUSD * CNY_PER_USD).toFixed(2);
+        document.getElementById("custom-currency-2-calculated").innerText = (amountInUSD * JPY_PER_USD).toFixed(2);
+        
+        let errorMessage = document.getElementById("error-message");
+        if (isNaN(amount) || amount <= 0) {
+            errorMessage.textContent = "Make sure the amount is a positive number!";
+            errorMessage.style.display = "inline"; // Show the error message
+            return; // Stop further execution
+        }
+        console.log((selectedCurrency) || "No currency selected");
+        if(selectedCurrency=== undefined){
+          errorMessage.textContent = "Make sure to select a currency to convert from!";
+          errorMessage.style.display = "inline"; // Show the error message
+          return; // Stop further execution
+
+        }
+        else{
+          errorMessage.style.display = "none";
+        }
+
         // Write some code to make sure the amount is positive.
         // If it's not, set the content of the error message element:
-        document.getElementById("error-message").textContent = ""; // ...
+        //document.getElementById("error-message").textContent = "Make sure the amount is positive"; // ...
         // Consider also hiding or showing the element:
         //   document.getElementById("error-message").style.display = "none";
         //   document.getElementById("error-message").style.display = "block"; // or "inline", for a span
